@@ -1,45 +1,45 @@
 variable "aws_region" {
-    default = "us-east-2"
+  default = "us-east-2"
 }
 
 variable "AMIS" {
-  
-  type = map
+
+  type = map(any)
   default = {
-    us-east-2 = "ami-085f9c64a9b75eed5"
-    us-east-1 = ""
+    us-east-2  = "ami-085f9c64a9b75eed5"
+    us-east-1  = ""
     ap-south-1 = ""
   }
 }
 
-variable  PRIVATE_KEY_PATH {
-    default = "/home/bonny/.ssh/id_rsa"
+variable "PRIVATE_KEY_PATH" {
+  default = "/home/bonny/.ssh/id_rsa"
 }
 
 
-variable PUBBLIC_KEY_PATH {
-    default =  "/home/bonny/.ssh/id_rsa.pub"
+variable "PUBBLIC_KEY_PATH" {
+  default = "/home/bonny/.ssh/id_rsa.pub"
 }
 
-variable USERNAME {
-    default ="ubuntu"
+variable "USERNAME" {
+  default = "ubuntu"
 }
 
-variable MYIP {
-    default = "158.47.217.60/32"
+variable "MYIP" {
+  default = "158.47.217.60/32"
 }
 
-variable rmquser {
-    default = "rabbit"
+variable "rmquser" {
+  default = "rabbit"
 }
 
 variable "rmqpass" {
-    default = "Gr33n@pple123456"
-  
+  default = "Gr33n@pple123456"
+
 }
 
 variable "dbuser" {
-    default = "admin"
+  default = "admin"
 }
 
 variable "dbpass" {
