@@ -3,15 +3,6 @@ variable "aws_region" {
   default = "us-east-2"
 }
 
-variable "AMIS" {
-
-  type = map(any)
-  default = {
-    us-east-2  = "ami-085f9c64a9b75eed5"
-    us-east-1  = ""
-=======
-    default = "us-east-2"
-}
 
 variable "AMIS" {
   
@@ -19,7 +10,7 @@ variable "AMIS" {
   default = {
     us-east-2 = "ami-085f9c64a9b75eed5"
     us-east-1 = ""
->>>>>>> dcf5ec07ec1f2bdfc3aa8827104c80ec13f0159d
+
     ap-south-1 = ""
   }
 }
@@ -53,7 +44,7 @@ variable "rmqpass" {
 
 variable "dbuser" {
   default = "admin"
-=======
+}
 variable  PRIVATE_KEY_PATH {
     default = "/home/bonny/.ssh/id_rsa"
 }
