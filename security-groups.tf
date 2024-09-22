@@ -35,6 +35,11 @@ resource "aws_security_group" "vprofile-bastion-sg" {
         to_port = 0
         protocol = "-1"
         cidr_blocks = ["0.0.0.0/0"]
+        ipv6_cidr_blocks = []
+        prefix_list_ids  = []
+        security_groups  = []
+        self             = false
+        description      = "Allow all outbound traffic"
       }
     ]  
 
@@ -45,6 +50,11 @@ resource "aws_security_group" "vprofile-bastion-sg" {
         to_port = 22
         protocol = "tcp"
         cidr_blocks = [var.MYIP]
+        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
+        prefix_list_ids  = []       # Empty list for prefix list IDs
+        security_groups  = []       # Empty list for security groups
+        self             = false    # Whether this security group itself is included
+        description      = "Allow SSH from my IP"  # Optional descri
       }
     ]  
 
