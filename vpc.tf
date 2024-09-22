@@ -19,7 +19,7 @@ module "vpc" {
    }
 
    vpc_tags = {
-    Name = var.vpc.name
+    Name = var.vpc_name
    }
 }
 
