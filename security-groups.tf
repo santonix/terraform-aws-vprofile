@@ -30,7 +30,11 @@ resource "aws_security_group" "vprofile-bean-elb-sg"{
         description      = "Allow all outbound traffic"
       }  
             
-    ]  
+    ]
+
+    tags = {
+        Name = "vprofile-bean-elb-sg"
+    }  
 
 }
 
@@ -67,7 +71,11 @@ resource "aws_security_group" "vprofile-bastion-sg" {
         self             = false    # Whether this security group itself is included
         description      = "Allow SSH from my IP"  # Optional descri
       }
-    ]  
+    ] 
+
+    tags = {
+        Name = "vprofile-bastion-sg"
+    } 
 
 }
 
@@ -103,7 +111,11 @@ resource "aws_security_group" "vprofile-prod-sg" {
         self             = false    # Whether this security group itself is included
         description      = "Allow SSH from bastion"  # Optional descri
       }
-    ]  
+    ]
+
+    tags = {
+        Name = "vprofile-prod-sg"
+    }  
 }
 
 resource "aws_security_group" "vprofile-backend-sg" {
@@ -139,7 +151,11 @@ resource "aws_security_group" "vprofile-backend-sg" {
         self             = false    # Whether this security group itself is included
         description      = "Allow inbound traffic"  # Optional descri
       }
-    ]  
+    ]
+
+    tags = {
+        Name = "vprofile-backend-sg"
+    }  
 }
 
 resource "aws_security_group_rule" "sec_group_allow_itself" {
