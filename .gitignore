@@ -27,3 +27,4 @@ terraform.rc
 *.tfvars.json
 
 .terraform/
+.terraform/
