@@ -77,7 +77,7 @@ resource "aws_security_group" "vprofile-prod-sg" {
       {
         from_port = 22
         to_port = 22
-        protocol = tcp
+        protocol = "tcp"
         security_groups = [aws_security_group.vprofile-bastion-sg.id]
       }
     ]  
