@@ -42,25 +42,8 @@ variable "rmqpass" {
 
 }
 
-variable "dbuser" {
-  default = "admin"
-}
-variable  PRIVATE_KEY_PATH {
-    default = "/home/bonny/.ssh/id_rsa"
-}
 
 
-variable PUBBLIC_KEY_PATH {
-    default =  "/home/bonny/.ssh/id_rsa.pub"
-}
-
-variable USERNAME {
-    default ="ubuntu"
-}
-
-variable MYIP {
-    default = "158.47.217.60/32"
-}
 
 variable rmquser {
     default = "rabbit"
