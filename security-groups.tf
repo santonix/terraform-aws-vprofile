@@ -71,6 +71,12 @@ resource "aws_security_group" "vprofile-prod-sg" {
         to_port = 0
         protocol = "-1"
         cidr_blocks = ["0.0.0.0/0"]
+        cidr_blocks = [var.MYIP]
+        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
+        prefix_list_ids  = []       # Empty list for prefix list IDs
+        security_groups  = []       # Empty list for security groups
+        self             = false    # Whether this security group itself is included
+        description      = "Allow SSH outbound traffic"  # Optional descri
       }
     ]
     ingress = [
@@ -79,6 +85,12 @@ resource "aws_security_group" "vprofile-prod-sg" {
         to_port = 22
         protocol = "tcp"
         security_groups = [aws_security_group.vprofile-bastion-sg.id]
+        cidr_blocks = [var.MYIP]
+        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
+        prefix_list_ids  = []       # Empty list for prefix list IDs
+        security_groups  = []       # Empty list for security groups
+        self             = false    # Whether this security group itself is included
+        description      = "Allow SSH from bastion"  # Optional descri
       }
     ]  
 }
@@ -94,6 +106,12 @@ resource "aws_security_group" "vprofile-backend-sg" {
         to_port = 0
         protocol = "-1"
         cidr_blocks = ["0.0.0.0/0"]
+        cidr_blocks = [var.MYIP]
+        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
+        prefix_list_ids  = []       # Empty list for prefix list IDs
+        security_groups  = []       # Empty list for security groups
+        self             = false    # Whether this security group itself is included
+        description      = "Allow outbound traffic"  # Optional descri
       }
     ]  
 
@@ -103,6 +121,12 @@ resource "aws_security_group" "vprofile-backend-sg" {
         to_port = 0
         protocol = "tcp"
         security_groups = [aws_security_group.vprofile-prod-sg.id]
+        cidr_blocks = [var.MYIP]
+        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
+        prefix_list_ids  = []       # Empty list for prefix list IDs
+        security_groups  = []       # Empty list for security groups
+        self             = false    # Whether this security group itself is included
+        description      = "Allow inbound traffic"  # Optional descri
       }
     ]  
 }
