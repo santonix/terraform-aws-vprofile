@@ -6,7 +6,7 @@ resource "aws_security_group" "vprofile-bean-elb-sg"{
     ingress = {
         from_port = 80
         to_port = 80
-        protocol = tcp
+        protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
 
@@ -35,7 +35,7 @@ resource "aws_security_group" "vprofile-bastion-sg" {
     ingress = {
         from_port = 22
         to_port = 22
-        protocol = tcp
+        protocol = "tcp"
         cidr_blocks = [var.MYIP]
     }
 
