@@ -39,3 +39,28 @@ resource "aws_mq_broker" "vprofile-rmq" {
     password = var.rmqpass
   }
 }
+
+
+resource "aws_db_subnet_group" "vprofile-rds-subnet-group" {
+  name = "vprofile-rds-subnet-group"
+  subnet_ids = [ 
+    module.vpc.private_subnets[0], 
+    module.vpc.private_subnets[1], 
+    module.vpc.private_subnets[2] 
+  ]
+  tags = {
+    Name = "subnet-group-for-RDS"
+  }
+}
+
+resource "aws_elasticache_subnet_group" "vprofile-elasticache-subnet-group" {
+  name = "vprofile-elasticache-subnet-group"
+  subnet_ids = [
+    module.vpc.private_subnets[0], 
+    module.vpc.private_subnets[1], 
+    module.vpc.private_subnets[2]
+  ]
+  tags = {
+    Name = "subnet-group-for-elasticache"
+  }
+}
