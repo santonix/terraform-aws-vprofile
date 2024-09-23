@@ -32,7 +32,7 @@ resource "aws_mq_broker" "vprofile-rmq" {
   engine_version       = "5.17.6"
   host_instance_type   = "mq.t2.micro"
   security_groups      = [ aws_security_group.vprofile-backend-sg.id ]
-  subnet_ids           = [module.vpc.private_subnets[0], module.vpc.private_subnets[1]]
+  subnet_ids           = [module.vpc.private_subnets[0]]
 
   user {
     username = var.rmquser
