@@ -1,6 +1,6 @@
 resource "aws_elastic_beanstalk_environment" "vprofile-beanstalk-prod" {
     name = "vprofile-beanstalk-prod"
-    application = aws_elastic_beanstalk_application.vprofile-prod
+    application = "aws_elastic_beanstalk_application.vprofile-prod"
     solution_stack_name = "64bit Amazon Linux 2 v4.3.15 running Tomcat 8.5 Corretto 11"
     setting {
       name = "vpcid"
