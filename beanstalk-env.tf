@@ -4,21 +4,15 @@ resource "aws_elastic_beanstalk_environment" "vprofile-beanstalk-prod" {
   solution_stack_name = "64bit Amazon Linux 2 v4.7.1 running Tomcat 9 Corretto 11"
 
   setting {
-    name      = "vpcid"
     namespace = "aws:ec2:vpc"
+    name      = "vpcid"
     value     = module.vpc.vpc_id
-  }
-
-  setting {
-    namespace = "aws:autoscaling:launchconfiguration"
-    name      = "IamInstanceProfile"
-    value     = "aws-elasticbeanstalk-ec2-role"
   }
 
   setting {
     namespace = "aws:ec2:vpc"
     name      = "AssociatePublicIpAddress"
-    value     = "false"
+    value     = "false"  # Only if instances should be publicly accessible
   }
 
   setting {
@@ -27,10 +21,17 @@ resource "aws_elastic_beanstalk_environment" "vprofile-beanstalk-prod" {
     value     = join(",", [module.vpc.private_subnets[0], module.vpc.private_subnets[1], module.vpc.private_subnets[2]])
   }
 
+  # Assign public subnets for the ELB if your app needs to be accessible from the internet
   setting {
     namespace = "aws:ec2:vpc"
     name      = "ELBsubnets"
-    value     = join(",", [module.vpc.private_subnets[0], module.vpc.private_subnets[1], module.vpc.private_subnets[2]])
+    value     = join(",", [module.vpc.public_subnets[0], module.vpc.public_subnets[1], module.vpc.public_subnets[2]])
+  }
+
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "IamInstanceProfile"
+    value     = "aws-elasticbeanstalk-ec2-role"
   }
 
   setting {
@@ -41,14 +42,20 @@ resource "aws_elastic_beanstalk_environment" "vprofile-beanstalk-prod" {
 
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
-    name      = "InstanceType"
-    value     = "t2.micro"
+    name      = "SecurityGroups"
+    value     = aws_security_group.vprofile-prod-sg.id
   }
 
   setting {
-    namespace = "aws:autoscaling:asg"
-    name      = "Availability zones"
-    value     = "Any 3"
+    namespace = "aws:elbv2:loadbalancer"
+    name      = "SecurityGroups"
+    value     = aws_security_group.vprofile-bean-elb-sg.id
+  }
+
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "InstanceType"
+    value     = "t2.micro"
   }
 
   setting {
@@ -103,42 +110,6 @@ resource "aws_elastic_beanstalk_environment" "vprofile-beanstalk-prod" {
     namespace = "aws:elb:loadbalancer"
     name      = "CrossZone"
     value     = "true"
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:command"
-    name      = "BatchSizeType"
-    value     = "fixed"
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:environment:process:default"
-    name      = "StickinessEnabled"
-    value     = "true"
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:command"
-    name      = "BatchSize"
-    value     = "1"
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:command"
-    name      = "DeploymentPolicy"
-    value     = "Rolling"
-  }
-
-  setting {
-    namespace = "aws:autoscaling:launchconfiguration"
-    name      = "SecurityGroups"
-    value     = aws_security_group.vprofile-prod-sg.id
-  }
-
-  setting {
-    namespace = "aws:elbv2:loadbalancer"
-    name      = "SecurityGroups"
-    value     = aws_security_group.vprofile-bean-elb-sg.id
   }
 
   depends_on = [aws_security_group.vprofile-bean-elb-sg, aws_security_group.vprofile-prod-sg]
