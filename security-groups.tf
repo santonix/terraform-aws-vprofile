@@ -33,7 +33,7 @@ resource "aws_security_group" "vprofile-bastion-sg" {
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = [var.MYIP] # Ensure var.MYIP is properly defined
+    cidr_blocks      = ["0.0.0.0/0"] # Ensure var.MYIP is properly defined
     description      = "Allow SSH from my IP"
   }
 
