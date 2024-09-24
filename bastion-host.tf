@@ -12,7 +12,7 @@ resource "aws_instance" "vprofile-bastion" {
     }
 
     provisioner "file" {
-        content = templatefile("terraform-aws-vprofile/db-deploy.tmpl", {rds-endpoint = aws_db_instance.vprofile-rds.address, dbuser = var.dbuser})
+        content = templatefile("/home/bonny/terraform-project/terraform-aws-vprofile/db-deploy.tmpl", {rds-endpoint = aws_db_instance.vprofile-rds.address, dbuser = var.dbuser})
         destination = "/tmp/vprofile-dbdeploy.sh"
       
     }
