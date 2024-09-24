@@ -1,4 +1,4 @@
-resource "aws_db_instance" "default" {
+resource "aws_db_instance" "vprofile-rds" {
   allocated_storage    = 20
   storage_type         = "gp2"
   db_name              = var.dbname
