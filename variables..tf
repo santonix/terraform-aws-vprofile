@@ -5,8 +5,8 @@ variable "aws_region" {
 
 
 variable "AMIS" {
-  
-  type = map
+
+  type = map(any)
   default = {
     us-east-2 = "ami-085f9c64a9b75eed5"
     us-east-1 = ""
@@ -47,7 +47,7 @@ variable "rmqpass" {
 
 
 variable "dbuser" {
-    default = "admin"
+  default = "admin"
 
 }
 

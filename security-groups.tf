@@ -1,168 +1,121 @@
-resource "aws_security_group" "vprofile-bean-elb-sg"{
-    name = "vprofile-bean-elb-sg"
-    description = "security group for bean-elb"
-    vpc_id = module.vpc.vpc_id
+resource "aws_security_group" "vprofile-bean-elb-sg" {
+  name        = "vprofile-bean-elb-sg"
+  description = "Security group for bean-elb"
+  vpc_id      = module.vpc.vpc_id
 
-    ingress =  [ 
-      {
-        from_port = 80
-        to_port = 80
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-        ipv6_cidr_blocks = []
-        prefix_list_ids  = []
-        security_groups  = []
-        self             = false
-        description      = "Allow all inbound traffic on port 80"
-      }
-    ]  
+  ingress {
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = "Allow all inbound traffic on port 80"
+  }
 
-    egress = [
-      {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-        ipv6_cidr_blocks = []
-        prefix_list_ids  = []
-        security_groups  = []
-        self             = false
-        description      = "Allow all outbound traffic"
-      }  
-            
-    ]
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = "Allow all outbound traffic"
+  }
 
-    tags = {
-        Name = "vprofile-bean-elb-sg"
-    }  
-
+  tags = {
+    Name = "vprofile-bean-elb-sg"
+  }
 }
 
 resource "aws_security_group" "vprofile-bastion-sg" {
+  name        = "vprofile-bastion-sg"
+  description = "Security group for bastion host EC2 instance"
+  vpc_id      = module.vpc.vpc_id
 
-    name = "vprofile-bastion-sg"  
-    description = "security group for bastion host ec2 instance"
-    vpc_id = module.vpc.vpc_id
+  ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = [var.MYIP] # Ensure var.MYIP is properly defined
+    description      = "Allow SSH from my IP"
+  }
 
-    egress = [
-      {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-        ipv6_cidr_blocks = []
-        prefix_list_ids  = []
-        security_groups  = []
-        self             = false
-        description      = "Allow all outbound traffic"
-      }
-    ]  
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = "Allow all outbound traffic"
+  }
 
-    ingress = [
-    
-      {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = [var.MYIP]
-        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
-        prefix_list_ids  = []       # Empty list for prefix list IDs
-        security_groups  = []       # Empty list for security groups
-        self             = false    # Whether this security group itself is included
-        description      = "Allow SSH from my IP"  # Optional descri
-      }
-    ] 
-
-    tags = {
-        Name = "vprofile-bastion-sg"
-    } 
-
+  tags = {
+    Name = "vprofile-bastion-sg"
+  }
 }
 
 resource "aws_security_group" "vprofile-prod-sg" {
-    name = "vprofile-prod-sg"
-    description = "sg for beanstalk instances"
-    vpc_id = module.vpc.vpc_id
+  name        = "vprofile-prod-sg"
+  description = "Security group for Beanstalk instances"
+  vpc_id      = module.vpc.vpc_id
 
-    egress = [
-      {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-        cidr_blocks = [var.MYIP]
-        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
-        prefix_list_ids  = []       # Empty list for prefix list IDs
-        security_groups  = []       # Empty list for security groups
-        self             = false    # Whether this security group itself is included
-        description      = "Allow SSH outbound traffic"  # Optional descri
-      }
-    ]
-    ingress = [
-      {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        security_groups = [aws_security_group.vprofile-bastion-sg.id]
-        cidr_blocks = [var.MYIP]
-        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
-        prefix_list_ids  = []       # Empty list for prefix list IDs
-        security_groups  = []       # Empty list for security groups
-        self             = false    # Whether this security group itself is included
-        description      = "Allow SSH from bastion"  # Optional descri
-      }
-    ]
+  ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    security_groups  = [aws_security_group.vprofile-bastion-sg.id] # Bastion SG allowed
+    description      = "Allow SSH from bastion"
+  }
 
-    tags = {
-        Name = "vprofile-prod-sg"
-    }  
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = "Allow all outbound traffic"
+  }
+
+  tags = {
+    Name = "vprofile-prod-sg"
+  }
 }
 
 resource "aws_security_group" "vprofile-backend-sg" {
-    name = "vprofile-backend-sg"
-    description = "sg for RDS, active mq, elastic cached"
-    vpc_id = module.vpc.vpc_id
+  name        = "vprofile-backend-sg"
+  description = "Security group for RDS, Active MQ, Elastic Cache"
+  vpc_id      = module.vpc.vpc_id
 
-    egress = [
-      {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-        cidr_blocks = [var.MYIP]
-        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
-        prefix_list_ids  = []       # Empty list for prefix list IDs
-        security_groups  = []       # Empty list for security groups
-        self             = false    # Whether this security group itself is included
-        description      = "Allow outbound traffic"  # Optional descri
-      }
-    ]  
+  ingress {
+    from_port        = 3306
+    to_port          = 3306
+    protocol         = "tcp"
+    security_groups  = [aws_security_group.vprofile-bastion-sg.id] # Bastion allowed to access RDS
+    description      = "Allow MySQL traffic from bastion"
+  }
 
-    ingress = [
-      {
-        from_port = 0
-        to_port = 0
-        protocol = "tcp"
-        security_groups = [aws_security_group.vprofile-prod-sg.id]
-        cidr_blocks = [var.MYIP]
-        ipv6_cidr_blocks = []       # Empty list for IPv6 CIDR blocks
-        prefix_list_ids  = []       # Empty list for prefix list IDs
-        security_groups  = []       # Empty list for security groups
-        self             = false    # Whether this security group itself is included
-        description      = "Allow inbound traffic"  # Optional descri
-      }
-    ]
+  ingress {
+    from_port        = 0
+    to_port          = 65535
+    protocol         = "tcp"
+    security_groups  = [aws_security_group.vprofile-prod-sg.id] # Allow production SG traffic
+    description      = "Allow traffic from production instances"
+  }
 
-    tags = {
-        Name = "vprofile-backend-sg"
-    }  
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = "Allow all outbound traffic"
+  }
+
+  tags = {
+    Name = "vprofile-backend-sg"
+  }
 }
 
 resource "aws_security_group_rule" "sec_group_allow_itself" {
-    type = "ingress"
-    from_port = 0
-    to_port = 65535
-    protocol = "tcp"
-    security_group_id = aws_security_group.vprofile-backend-sg.id
-    source_security_group_id = aws_security_group.vprofile-backend-sg.id
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.vprofile-backend-sg.id
+  source_security_group_id = aws_security_group.vprofile-backend-sg.id
+  description              = "Allow traffic within the backend SG"
 }
