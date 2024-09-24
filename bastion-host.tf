@@ -1,7 +1,7 @@
 resource "aws_instance" "vprofile-bastion" {
   ami                    = lookup(var.AMIS, var.aws_region)
   instance_type          = "t2.micro"
-  key_name               = aws_key_pair.vprofilekey.key_name
+  key_name               = "vprofilekey"
   subnet_id              = module.vpc.public_subnets[0]
   count                  = var.instance_count
 
