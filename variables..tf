@@ -17,7 +17,7 @@ variable "AMIS" {
 
 
 variable "PRIVATE_KEY_PATH" {
-  default = "/home/bonny/.ssh/id_rsa"
+  default = "/home/bonny/Downloads/vprofilekey.pem"
 }
 
 
