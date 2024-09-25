@@ -31,7 +31,7 @@ resource "aws_elastic_beanstalk_environment" "vprofile-beanstalk-prod" {
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "IamInstanceProfile"
-    value     = "aws-elasticbeanstalk-ec2-role"
+    value     = aws_iam_instance_profile.beanstalk_ec2_instance_profile.name
   }
 
   setting {
@@ -146,4 +146,10 @@ resource "aws_iam_role_policy_attachment" "beanstalk_docker" {
   role       = aws_iam_role.beanstalk_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker"
 }
+
+resource "aws_iam_instance_profile" "beanstalk_ec2_instance_profile" {
+  name = "aws-elasticbeanstalk-ec2-role"
+  role = aws_iam_role.beanstalk_ec2_role.name
+}
+
 
