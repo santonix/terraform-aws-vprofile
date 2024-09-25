@@ -12,7 +12,7 @@ resource "aws_elastic_beanstalk_environment" "vprofile-beanstalk-prod" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "AssociatePublicIpAddress"
-    value     = "false"  # Only if instances should be publicly accessible
+    value     = "true" # Only if instances should be publicly accessible
   }
 
   setting {

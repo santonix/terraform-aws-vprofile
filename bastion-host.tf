@@ -1,9 +1,9 @@
 resource "aws_instance" "vprofile-bastion" {
-  ami                    = lookup(var.AMIS, var.aws_region)
-  instance_type          = "t2.micro"
-  key_name               = "vprofilekey"
-  subnet_id              = module.vpc.public_subnets[0]
-  count                  = var.instance_count
+  ami           = lookup(var.AMIS, var.aws_region)
+  instance_type = "t2.micro"
+  key_name      = "vprofilekey"
+  subnet_id     = module.vpc.public_subnets[0]
+  count         = var.instance_count
 
   # Assign a public IP to the instance
   associate_public_ip_address = true
@@ -17,12 +17,12 @@ resource "aws_instance" "vprofile-bastion" {
 
   # Upload the db-deploy script to the bastion host
   provisioner "file" {
-    content     = templatefile(
-      "/home/bonny/terraform-project/terraform-aws-vprofile/db-deploy.tmpl", 
-      { 
-        rds-endpoint = aws_db_instance.vprofile-rds.address, 
-        dbuser       = var.dbuser, 
-        dbpass       = var.dbpass 
+    content = templatefile(
+      "/home/bonny/terraform-project/terraform-aws-vprofile/db-deploy.tmpl",
+      {
+        rds-endpoint = aws_db_instance.vprofile-rds.address,
+        dbuser       = var.dbuser,
+        dbpass       = var.dbpass
       }
     )
     destination = "/tmp/vprofile-dbdeploy.sh"

@@ -4,19 +4,19 @@ resource "aws_security_group" "vprofile-bean-elb-sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "Allow all inbound traffic on port 80"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all inbound traffic on port 80"
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
@@ -30,19 +30,19 @@ resource "aws_security_group" "vprofile-bastion-sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"] # Ensure var.MYIP is properly defined
-    description      = "Allow SSH from my IP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Ensure var.MYIP is properly defined
+    description = "Allow SSH from my IP"
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
@@ -56,19 +56,19 @@ resource "aws_security_group" "vprofile-prod-sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    security_groups  = [aws_security_group.vprofile-bastion-sg.id] # Bastion SG allowed
-    description      = "Allow SSH from bastion"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.vprofile-bastion-sg.id] # Bastion SG allowed
+    description     = "Allow SSH from bastion"
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
@@ -82,27 +82,27 @@ resource "aws_security_group" "vprofile-backend-sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    from_port        = 3306
-    to_port          = 3306
-    protocol         = "tcp"
-    security_groups  = [aws_security_group.vprofile-bastion-sg.id] # Bastion allowed to access RDS
-    description      = "Allow MySQL traffic from bastion"
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.vprofile-bastion-sg.id] # Bastion allowed to access RDS
+    description     = "Allow MySQL traffic from bastion"
   }
 
   ingress {
-    from_port        = 0
-    to_port          = 65535
-    protocol         = "tcp"
-    security_groups  = [aws_security_group.vprofile-prod-sg.id] # Allow production SG traffic
-    description      = "Allow traffic from production instances"
+    from_port       = 0
+    to_port         = 65535
+    protocol        = "tcp"
+    security_groups = [aws_security_group.vprofile-prod-sg.id] # Allow production SG traffic
+    description     = "Allow traffic from production instances"
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
   }
 
   tags = {
