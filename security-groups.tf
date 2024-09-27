@@ -91,8 +91,8 @@ resource "aws_security_group" "vprofile-backend-sg" {
 
   ingress {
     from_port       = 0
-    to_port         = 65535
-    protocol        = "tcp"
+    to_port         = 0
+    protocol        = "-1"
     security_groups = [aws_security_group.vprofile-prod-sg.id] # Allow production SG traffic
     description     = "Allow traffic from production instances"
   }
